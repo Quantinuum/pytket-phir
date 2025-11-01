@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 name = "pytket-phir"
 description = "A circuit analyzer and translator from pytket to PHIR"
 readme = "README.md"
-requires-python = ">=3.10, <3.14"
+requires-python = ">=3.10, <3.15"
 license = { file = "LICENSE" }
 authors = [{ name = "Quantinuum" }]
 maintainers = [
@@ -28,9 +28,12 @@ classifiers = [
 dynamic = ["version"]
 dependencies = [
   "phir>=0.3.3",
-  "pytket>=2.0.0",
+  "pytket>=2.4.0",
   "wasmtime>=29.0.0",
 ]
+
+[tool.uv.sources]
+phir = { git = "https://github.com/CQCL/phir.git" }
 
 [dependency-groups]
 dev = [
