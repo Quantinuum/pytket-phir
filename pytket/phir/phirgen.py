@@ -430,7 +430,7 @@ def get_cop_from_op(op: ClOp) -> str | int:  # noqa: PLR0912
         case ClOp.RegPow:
             cop = "**"
         case _:
-            logger.error("Classical operation %s unsupported by PHIR", str(op))
+            logger.error("Classical operation %s unsupported by PHIR", op)
             raise NotImplementedError(op)
     return cop
 

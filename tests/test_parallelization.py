@@ -86,7 +86,7 @@ def test_single_qubit_circuit_with_parallel() -> None:
     )
     assert len(phir_with_parallel_phirgen) == len(phir_with_standard_phirgen)
     # since the rebasing converts to the native gate set,
-    # the names and angle foramts of the qops will not match.
+    # the names and angle formats of the qops will not match.
     # for example Ry gets converted to R1XY
     # compare angles and args instead
 

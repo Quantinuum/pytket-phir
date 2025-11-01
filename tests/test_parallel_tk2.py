@@ -64,7 +64,7 @@ def test_pll_tk2_diff_angles() -> None:
     q23_snd = (["q", 2] in qop1["args"][0]) and (["q", 3] in qop1["args"][0])
     assert (q01_fst and q23_snd) != (q23_fst and q01_snd)
 
-    # Check that the measure op is properly foramtted
+    # Check that the measure op is properly formatted
     measure_args = measure["args"]
     measure_returns = measure["returns"]
     assert len(measure_args) == len(measure_returns) == 4
