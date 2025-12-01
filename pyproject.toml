@@ -35,9 +35,9 @@ dependencies = [
 [dependency-groups]
 dev = [
   "networkx<3",
-  "pre-commit==4.3.0",
+  "pre-commit==4.5.0",
   "pydata-sphinx-theme>=0.16.1",
-  "pytest==8.4.2",
+  "pytest==9.0.1",
   "rich>=13.0",
   "sphinx>8.1",
 ]
