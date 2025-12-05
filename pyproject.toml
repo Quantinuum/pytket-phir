@@ -46,9 +46,9 @@ dev = [
 phirc = "pytket.phir.cli:main"
 
 [project.urls]
-Changelog = "https://github.com/CQCL/pytket-phir/blob/main/CHANGELOG.md"
-Documentation = "https://cqcl.github.io/pytket-phir/"
-Repository = "https://github.com/CQCL/pytket-phir.git"
+Changelog = "https://github.com/quantinuum/pytket-phir/blob/main/CHANGELOG.md"
+Documentation = "https://quantinuum.github.io/pytket-phir/"
+Repository = "https://github.com/quantinuum/pytket-phir.git"
 
 [project.optional-dependencies]
 phirc = ["projectq>=0.8.0", "quantum-pecos>=0.6.0.dev2"]

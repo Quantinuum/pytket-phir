@@ -190,7 +190,7 @@ def process_shards(
         # the gate is a quantum op with a fixed number of arguments and
         # a known machine restriction (i.e. not Barrier, TK2, etc)
         # TODO(asa): add support for barriers
-        # https://github.com/CQCL/pytket-phir/issues/55
+        # https://github.com/quantinuum/pytket-phir/issues/55
         eligible_command_type = shard.primary_command.op.type in tket_gate_to_phir
         # a group is available for that gate type
         group_available = shard.primary_command.op.type in types2groups
