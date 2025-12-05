@@ -489,7 +489,7 @@ def convert_subcmd(op: tk.Op, cmd: tk.Command) -> JsonDict | None:  # noqa: PLR0
 
         case tk.BarrierOp():
             if op.data:
-                # See https://github.com/CQCL/tket/blob/0ec603986821d994caa3a0fb9c4640e5bc6c0a24/pytket/pytket/qasm/qasm.py#L419-L459
+                # See https://github.com/quantinuum/tket/blob/0ec603986821d994caa3a0fb9c4640e5bc6c0a24/pytket/pytket/qasm/qasm.py#L419-L459
                 match op.data[0:5]:
                     case "sleep":
                         duration = op.data.removeprefix("sleep(").removesuffix(")")
@@ -519,7 +519,7 @@ def convert_subcmd(op: tk.Op, cmd: tk.Command) -> JsonDict | None:  # noqa: PLR0
             # TODO(AE): Check that all ClExprOps in the circuit are register-aligned
             # (i.e. that each register variable, and the register output if applicable,
             # comprises bits that constitute a complete register in the correct order).
-            # https://github.com/CQCL/tket/issues/1644
+            # https://github.com/quantinuum/tket/issues/1644
 
             rhs = [phir_from_clexpr_arg(expr, bit_posn, reg_posn, cmd_args)]
             if has_reg_output(expr.op):
