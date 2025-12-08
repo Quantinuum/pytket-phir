@@ -52,7 +52,7 @@ def test_simple_cond_classical() -> None:
 
 
 def test_pytket_classical_only() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/61 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/61 ."""
     c = Circuit()
     a = c.add_c_register("a", 2)
     b = c.add_c_register("b", 3)
@@ -107,7 +107,7 @@ def test_pytket_classical_only() -> None:
 
 
 def test_clexpr() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/86 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/86 ."""
     circ = Circuit()
     a = circ.add_c_register("a", 2)
     b = circ.add_c_register("b", 2)
@@ -124,7 +124,7 @@ def test_clexpr() -> None:
 
 
 def test_nested_arith() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/87 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/87 ."""
     circ = Circuit()
     a = circ.add_c_register("a", 2)
     b = circ.add_c_register("b", 2)
@@ -141,7 +141,7 @@ def test_nested_arith() -> None:
 
 
 def test_arith_with_int() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/88 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/88 ."""
     circ = Circuit()
     a = circ.add_c_register("a", 2)
     wexpr, args = wired_clexpr_from_logic_exp(a << 1, a.to_list())
@@ -156,7 +156,7 @@ def test_arith_with_int() -> None:
 
 
 def test_bitwise_ops() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/91 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/91 ."""
     circ = Circuit()
     a = circ.add_c_register("a", 2)
     b = circ.add_c_register("b", 2)
@@ -173,7 +173,7 @@ def test_bitwise_ops() -> None:
 
 
 def test_conditional_barrier() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/119 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/119 ."""
     circ = get_qasm_as_circuit(QasmFile.cond_barrier)
     phir = json.loads(pytket_to_phir(circ))
     assert phir["ops"][4] == {"//": "IF ([m[0], m[1]] == 0) THEN Barrier q[0], q[1];"}
@@ -191,7 +191,7 @@ def test_conditional_barrier() -> None:
 
 
 def test_nested_bitwise_op() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/133 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/133 ."""
     circ = Circuit()
     a = circ.add_c_register("a", 4)
     b = circ.add_c_register("b", 1)
@@ -225,7 +225,7 @@ def test_sleep_idle() -> None:
 
 
 def test_reordering_classical_conditional() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/150 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/150 ."""
     circuit = Circuit(1)
 
     ctrl = circuit.add_c_register(name="ctrl", size=1)
@@ -259,7 +259,7 @@ def test_reordering_classical_conditional() -> None:
 
 
 def test_conditional_measure() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/154 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/154 ."""
     c = Circuit(2, 2)
     c.H(0).H(1)
     c.Measure(0, 0)
@@ -274,7 +274,7 @@ def test_conditional_measure() -> None:
 
 
 def test_conditional_classical_not() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/159 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/159 ."""
     circuit = Circuit()
     target_reg = circuit.add_c_register(BitRegister(name="target_reg", size=1))
     control_reg = circuit.add_c_register(BitRegister(name="control_reg", size=1))
@@ -299,7 +299,7 @@ def test_conditional_classical_not() -> None:
 
 def test_explicit_classical_ops() -> None:
     """Test explicit predicates and modifiers."""
-    # From https://github.com/CQCL/tket/blob/a2f6fab8a57da8787dfae94764b7c3a8e5779024/pytket/tests/classical_test.py#L97-L101
+    # From https://github.com/quantinuum/tket/blob/a2f6fab8a57da8787dfae94764b7c3a8e5779024/pytket/tests/classical_test.py#L97-L101
     c = Circuit(0, 4)
     # predicates
     c.add_c_and(1, 2, 3)
@@ -343,7 +343,7 @@ def test_explicit_classical_ops() -> None:
 
 def test_multi_bit_ops() -> None:
     """Test classical ops added to the circuit via tket multi-bit ops."""
-    # Test from https://github.com/CQCL/tket/blob/a2f6fab8a57da8787dfae94764b7c3a8e5779024/pytket/tests/classical_test.py#L107-L112
+    # Test from https://github.com/quantinuum/tket/blob/a2f6fab8a57da8787dfae94764b7c3a8e5779024/pytket/tests/classical_test.py#L107-L112
     c = Circuit()
     c0 = c.add_c_register("c0", 3)
     c1 = c.add_c_register("c1", 4)
@@ -407,7 +407,7 @@ def test_multi_bit_ops() -> None:
 
 
 def test_irregular_multibit_ops() -> None:
-    """From https://github.com/CQCL/pytket-phir/pull/162#discussion_r1555807863 ."""
+    """https://github.com/quantinuum/pytket-phir/pull/162#discussion_r1555807863 ."""
     c = Circuit()
     areg = c.add_c_register("a", 2)
     breg = c.add_c_register("b", 2)
@@ -442,7 +442,7 @@ def test_irregular_multibit_ops() -> None:
 
 
 def test_nullary_ops() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/178 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/178 ."""
     c = Circuit(1, 1)
     exp1 = create_bit_logic_exp(BitWiseOp.ONE, [])
     c.H(0, condition=exp1)
@@ -472,7 +472,7 @@ def test_nullary_ops() -> None:
 
 
 def test_condition_multiple_bits() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/215 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/215 ."""
     n_bits = 3
     c = Circuit(1, n_bits)
     c.Rz(0.5, 0, condition_bits=list(range(n_bits)), condition_value=6)
@@ -495,7 +495,7 @@ def test_condition_multiple_bits() -> None:
 
 
 def test_unused_classical_registers() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/237 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/237 ."""
     circ = Circuit()
     _ = circ.add_c_register("a", 1)
     phir = json.loads(pytket_to_phir(circ))

@@ -35,9 +35,9 @@ dependencies = [
 [dependency-groups]
 dev = [
   "networkx<3",
-  "pre-commit==4.3.0",
+  "pre-commit==4.5.0",
   "pydata-sphinx-theme>=0.16.1",
-  "pytest==8.4.2",
+  "pytest==9.0.1",
   "rich>=13.0",
   "sphinx>8.1",
 ]
@@ -46,9 +46,9 @@ dev = [
 phirc = "pytket.phir.cli:main"
 
 [project.urls]
-Changelog = "https://github.com/CQCL/pytket-phir/blob/main/CHANGELOG.md"
-Documentation = "https://cqcl.github.io/pytket-phir/"
-Repository = "https://github.com/CQCL/pytket-phir.git"
+Changelog = "https://github.com/quantinuum/pytket-phir/blob/main/CHANGELOG.md"
+Documentation = "https://quantinuum.github.io/pytket-phir/"
+Repository = "https://github.com/quantinuum/pytket-phir.git"
 
 [project.optional-dependencies]
 phirc = ["projectq>=0.8.0", "quantum-pecos>=0.6.0.dev2"]

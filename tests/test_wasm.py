@@ -162,7 +162,7 @@ def test_pytket_wasm_unsupported_reg_len() -> None:
 
 
 def test_conditional_wasm() -> None:
-    """From https://github.com/CQCL/pytket-phir/issues/156 ."""
+    """From https://github.com/quantinuum/pytket-phir/issues/156 ."""
     w = WasmModuleHandler(get_wat_as_wasm_bytes(WatFile.testfile))
 
     c = Circuit(1)

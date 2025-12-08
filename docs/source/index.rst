@@ -9,7 +9,7 @@ pytket-phir
 
 PHIR stands for `PECOS <https://github.com/PECOS-packages/PECOS>`__
 *High-level Intermediate Representation*. See `PHIR
-specification <https://github.com/CQCL/phir/blob/main/spec.md>`__
+specification <https://github.com/quantinuum/phir/blob/main/spec.md>`__
 for more.
 
 ``pytket-phir`` is a circuit analyzer and translator from

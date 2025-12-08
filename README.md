@@ -4,7 +4,7 @@
 [![Python versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://img.shields.io/badge/python-3.10%2C%203.11%20%7C%203.12-blue.svg)
 
 PHIR stands for _[PECOS](https://github.com/PECOS-packages/PECOS) High-level Intermediate Representation_.
-See [PHIR specification](https://github.com/CQCL/phir/blob/main/spec.md) for more.
+See [PHIR specification](https://github.com/quantinuum/phir/blob/main/spec.md) for more.
 
 `pytket-phir` is a circuit analyzer and translator from [pytket](https://tket.quantinuum.com/api-docs/index.html) to PHIR.
 
