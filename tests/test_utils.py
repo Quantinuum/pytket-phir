@@ -49,7 +49,6 @@ class QasmFile(Enum):
     classical_ordering = auto()
     single_qubit_parallel_test = auto()
     exec_order_two_qubits = auto()
-    rz_exec_order_three_qubits = auto()
     cond_barrier = auto()
     arbitrary_qreg_names = auto()
     group_ordering = auto()
@@ -78,17 +77,24 @@ def get_qasm_as_circuit(qasm_file: QasmFile) -> "Circuit":
     )
 
 
-def get_phir_json(qasmfile: QasmFile, *, rebase: bool) -> "JsonDict":
-    """Get the QASM file for the specified circuit."""
-    qtm_machine = QtmMachine.H1
-    circuit = get_qasm_as_circuit(qasmfile)
-    if rebase:
-        circuit = rebase_to_qtm_machine(circuit, qtm_machine)
+def get_phir_json_from_pytket(
+    circuit: "Circuit", qtm_machine: QtmMachine = QtmMachine.H1
+) -> "JsonDict":
+    """Get the PHIR json for the specified pytket circuit."""
     machine = QTM_MACHINES_MAP.get(qtm_machine)
     assert machine
     shards = Sharder(circuit).shard()
     placed = place_and_route(shards, machine)
     return json.loads(genphir_parallel(placed, circuit, machine))  # type: ignore[misc, no-any-return]
+
+
+def get_phir_json(qasmfile: QasmFile, *, rebase: bool) -> "JsonDict":
+    """Get the PHIR json for the specified QASM."""
+    qtm_machine = QtmMachine.H1
+    circuit = get_qasm_as_circuit(qasmfile)
+    if rebase:
+        circuit = rebase_to_qtm_machine(circuit, qtm_machine)
+    return get_phir_json_from_pytket(circuit, qtm_machine)
 
 
 def get_wat_as_wasm_bytes(wat_file: WatFile) -> bytes:
