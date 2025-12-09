@@ -120,9 +120,11 @@ def test_three_qubit_rz_exec_order_preserved() -> None:
         "args": [["q", 0]],
     }
     assert phir["ops"][10] == {
-        "qop": "RZ",
-        "angles": [[1.0], "pi"],
-        "args": [["q", 1], ["q", 2]],
+        "block": "qparallel",
+        "ops": [
+            {"qop": "RZ", "angles": [[0.5], "pi"], "args": [["q", 1]]},
+            {"qop": "RZ", "angles": [[1.5], "pi"], "args": [["q", 2]]},
+        ],
     }
     assert phir["ops"][12] == {
         "qop": "R1XY",
