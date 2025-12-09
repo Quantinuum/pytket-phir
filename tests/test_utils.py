@@ -76,7 +76,10 @@ def get_qasm_as_circuit(qasm_file: QasmFile) -> "Circuit":
         f"{this_dir}/data/qasm/{qasm_file.name}.qasm", maxwidth=WORDSIZE
     )
 
-def get_phir_json_from_pytket(circuit: "Circuit", qtm_machine: QtmMachine=QtmMachine.H1) -> "JsonDict":
+
+def get_phir_json_from_pytket(
+    circuit: "Circuit", qtm_machine: QtmMachine = QtmMachine.H1
+) -> "JsonDict":
     """Get the PHIR json for the specified pytket circuit."""
     machine = QTM_MACHINES_MAP.get(qtm_machine)
     assert machine

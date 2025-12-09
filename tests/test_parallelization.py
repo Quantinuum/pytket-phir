@@ -9,6 +9,7 @@
 # mypy: disable-error-code="misc"
 
 import logging
+
 from pytket.circuit import Circuit
 
 from .test_utils import QasmFile, get_phir_json, get_phir_json_from_pytket
@@ -114,65 +115,63 @@ def test_single_qubit_circuit_with_parallel() -> None:
 def test_three_qubit_rz_exec_order_preserved() -> None:
     """Test that the order of gating is preserved in a 3 qubit circuit with RZ gates."""
     phir = get_phir_json_from_pytket(
-        Circuit.from_dict(
-            {
-                "bits": [["c", [0]], ["c", [1]], ["c", [2]]],
-                "commands": [
-                    {
-                        "args": [["q", [0]]],
-                        "op": {"params": ["0.5", "1/2"], "type": "PhasedX"},
+        Circuit.from_dict({
+            "bits": [["c", [0]], ["c", [1]], ["c", [2]]],
+            "commands": [
+                {
+                    "args": [["q", [0]]],
+                    "op": {"params": ["0.5", "1/2"], "type": "PhasedX"},
+                },
+                {"args": [["q", [1]]], "op": {"params": ["1.5"], "type": "Rz"}},
+                {"args": [["q", [2]]], "op": {"params": ["0.5"], "type": "Rz"}},
+                {
+                    "args": [["q", [1]], ["q", [2]]],
+                    "op": {"params": ["0.5"], "type": "ZZPhase"},
+                },
+                {"args": [["q", [1]]], "op": {"params": ["1/2"], "type": "Rz"}},
+                {"args": [["q", [2]]], "op": {"params": ["3/2"], "type": "Rz"}},
+                {
+                    "args": [["q", [2]]],
+                    "op": {"params": ["0.5", "1/2"], "type": "PhasedX"},
+                },
+                {
+                    "args": [["q", [0]], ["q", [1]], ["q", [2]]],
+                    "op": {
+                        "data": "",
+                        "signature": ["Q", "Q", "Q"],
+                        "type": "Barrier",
                     },
-                    {"args": [["q", [1]]], "op": {"params": ["1.5"], "type": "Rz"}},
-                    {"args": [["q", [2]]], "op": {"params": ["0.5"], "type": "Rz"}},
-                    {
-                        "args": [["q", [1]], ["q", [2]]],
-                        "op": {"params": ["0.5"], "type": "ZZPhase"},
+                },
+                {
+                    "args": [["q", [0]]],
+                    "op": {"params": ["3.5", "1/2"], "type": "PhasedX"},
+                },
+                {
+                    "args": [["q", [2]]],
+                    "op": {"params": ["0.5", "1/2"], "type": "PhasedX"},
+                },
+                {
+                    "args": [["q", [0]], ["q", [1]], ["q", [2]]],
+                    "op": {
+                        "data": "",
+                        "signature": ["Q", "Q", "Q"],
+                        "type": "Barrier",
                     },
-                    {"args": [["q", [1]]], "op": {"params": ["1/2"], "type": "Rz"}},
-                    {"args": [["q", [2]]], "op": {"params": ["3/2"], "type": "Rz"}},
-                    {
-                        "args": [["q", [2]]],
-                        "op": {"params": ["0.5", "1/2"], "type": "PhasedX"},
-                    },
-                    {
-                        "args": [["q", [0]], ["q", [1]], ["q", [2]]],
-                        "op": {
-                            "data": "",
-                            "signature": ["Q", "Q", "Q"],
-                            "type": "Barrier",
-                        },
-                    },
-                    {
-                        "args": [["q", [0]]],
-                        "op": {"params": ["3.5", "1/2"], "type": "PhasedX"},
-                    },
-                    {
-                        "args": [["q", [2]]],
-                        "op": {"params": ["0.5", "1/2"], "type": "PhasedX"},
-                    },
-                    {
-                        "args": [["q", [0]], ["q", [1]], ["q", [2]]],
-                        "op": {
-                            "data": "",
-                            "signature": ["Q", "Q", "Q"],
-                            "type": "Barrier",
-                        },
-                    },
-                    {"args": [["q", [0]], ["c", [0]]], "op": {"type": "Measure"}},
-                    {"args": [["q", [1]], ["c", [1]]], "op": {"type": "Measure"}},
-                    {"args": [["q", [2]], ["c", [2]]], "op": {"type": "Measure"}},
-                ],
-                "created_qubits": [],
-                "discarded_qubits": [],
-                "implicit_permutation": [
-                    [["q", [0]], ["q", [0]]],
-                    [["q", [1]], ["q", [1]]],
-                    [["q", [2]], ["q", [2]]],
-                ],
-                "phase": "0.0",
-                "qubits": [["q", [0]], ["q", [1]], ["q", [2]]],
-            }
-        )
+                },
+                {"args": [["q", [0]], ["c", [0]]], "op": {"type": "Measure"}},
+                {"args": [["q", [1]], ["c", [1]]], "op": {"type": "Measure"}},
+                {"args": [["q", [2]], ["c", [2]]], "op": {"type": "Measure"}},
+            ],
+            "created_qubits": [],
+            "discarded_qubits": [],
+            "implicit_permutation": [
+                [["q", [0]], ["q", [0]]],
+                [["q", [1]], ["q", [1]]],
+                [["q", [2]], ["q", [2]]],
+            ],
+            "phase": "0.0",
+            "qubits": [["q", [0]], ["q", [1]], ["q", [2]]],
+        })
     )
     # verify that the parallel RZ gates are executed before the second R1XY gate
     assert phir["ops"][8] == {
