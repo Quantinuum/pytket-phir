@@ -77,18 +77,22 @@ def get_qasm_as_circuit(qasm_file: QasmFile) -> "Circuit":
         f"{this_dir}/data/qasm/{qasm_file.name}.qasm", maxwidth=WORDSIZE
     )
 
-
-def get_phir_json(qasmfile: QasmFile, *, rebase: bool) -> "JsonDict":
-    """Get the QASM file for the specified circuit."""
-    qtm_machine = QtmMachine.H1
-    circuit = get_qasm_as_circuit(qasmfile)
-    if rebase:
-        circuit = rebase_to_qtm_machine(circuit, qtm_machine)
+def get_phir_json_from_pytket(circuit: "Circuit", qtm_machine: QtmMachine=QtmMachine.H1) -> "JsonDict":
+    """Get the PHIR json for the specified pytket circuit."""
     machine = QTM_MACHINES_MAP.get(qtm_machine)
     assert machine
     shards = Sharder(circuit).shard()
     placed = place_and_route(shards, machine)
     return json.loads(genphir_parallel(placed, circuit, machine))  # type: ignore[misc, no-any-return]
+
+
+def get_phir_json(qasmfile: QasmFile, *, rebase: bool) -> "JsonDict":
+    """Get the PHIR json for the specified QASM."""
+    qtm_machine = QtmMachine.H1
+    circuit = get_qasm_as_circuit(qasmfile)
+    if rebase:
+        circuit = rebase_to_qtm_machine(circuit, qtm_machine)
+    return get_phir_json_from_pytket(circuit, qtm_machine)
 
 
 def get_wat_as_wasm_bytes(wat_file: WatFile) -> bytes:
