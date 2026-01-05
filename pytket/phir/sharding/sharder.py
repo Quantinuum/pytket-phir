@@ -239,11 +239,33 @@ class Sharder:
         )
         for qubit in remaining_qubits:
             logger.debug("Adding barrier for subcommands for qubit %s", qubit)
+            commands_before = self._circuit.get_commands()
             self._circuit.add_barrier([qubit])
-            # Easiest way to get to a command, since there's no constructor. Could
-            # create an entire orphan circuit with the matching qubits and the barrier
-            # instead, if this has unintended consequences
-            barrier_command = self._circuit.get_commands()[-1]
+            commands_after = self._circuit.get_commands()
+
+            # Find the newly added barrier command by comparing before/after
+            # The barrier may be inserted anywhere in the circuit, not just at the end
+            if len(commands_after) == len(commands_before) + 1:
+                # Find which command is new
+                for i, cmd in enumerate(commands_after):
+                    if i >= len(commands_before) or cmd != commands_before[i]:
+                        barrier_command = cmd
+                        logger.debug(
+                            "Found barrier command at index %d: %s", i, barrier_command
+                        )
+                        break
+                else:
+                    # Should not happen
+                    msg = "Could not find newly added barrier command"
+                    raise RuntimeError(msg)
+            else:
+                delta = len(commands_after) - len(commands_before)
+                msg = (
+                    "Expected exactly one command to be added, "
+                    f"but got {delta} commands"
+                )
+                raise RuntimeError(msg)
+
             self._build_shard(barrier_command)
 
     def _add_pending_sub_command(self, command: Command) -> None:

@@ -508,6 +508,52 @@ def test_unused_classical_registers() -> None:
     }
 
 
+def test_xor_target() -> None:
+    """From https://github.com/Quantinuum/pytket-phir/issues/306 ."""
+    circ = Circuit(5, 4)
+    qubits = circ.qubits
+    bits = circ.bits
+    circ.add_c_setbits([True], [bits[3]])
+
+    circ.Measure(qubits[0], bits[0])
+    circ.Rz(0.5, qubits[1])
+    circ.Measure(qubits[0], bits[1])
+    circ.PhasedX(1.0, 0, qubits[2], condition=bits[1])
+
+    circ.add_c_xor(arg0_in=bits[1], arg1_in=bits[0], arg_out=bits[2])
+    circ.add_c_xor(arg0_in=bits[1], arg1_in=bits[0], arg_out=bits[1])
+
+    phir = json.loads(pytket_to_phir(circ))
+
+    # Find all XOR operations in the PHIR output
+    xor_ops = [
+        op
+        for op in phir["ops"]
+        if op.get("cop") == "="
+        and isinstance(op.get("args", [None])[0], dict)
+        and op["args"][0].get("cop") == "^"
+    ]
+
+    # Should have exactly 2 XOR operations
+    assert len(xor_ops) == 2, f"Expected 2 XOR operations, found {len(xor_ops)}"
+
+    # First XOR should write to c[2]
+    assert xor_ops[0]["returns"] == [["c", 2]], (
+        f"First XOR should write to c[2], got {xor_ops[0]['returns']}"
+    )
+    assert xor_ops[0]["args"][0]["args"] == [["c", 1], ["c", 0]], (
+        f"First XOR should compute c[1] ^ c[0], got {xor_ops[0]['args'][0]['args']}"
+    )
+
+    # Second XOR should write to c[1]
+    assert xor_ops[1]["returns"] == [["c", 1]], (
+        f"Second XOR should write to c[1], got {xor_ops[1]['returns']}"
+    )
+    assert xor_ops[1]["args"][0]["args"] == [["c", 0], ["c", 1]], (
+        f"Second XOR should compute c[0] ^ c[1], got {xor_ops[1]['args'][0]['args']}"
+    )
+
+
 def test_classical_0() -> None:
     """Test handling of ClExprOp."""
     circ = get_qasm_as_circuit(QasmFile.classical0)
