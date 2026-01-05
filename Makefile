@@ -14,7 +14,7 @@ tests:
 	uv run pytest -s -x -vv tests/test*.py
 
 lint:
-	uvx prek run --all-files
+	uv run pre-commit run --all-files
 
 docs:
 	# uv run sphinx-apidoc --implicit-namespaces -f -o docs/source/ pytket

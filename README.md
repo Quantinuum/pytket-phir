@@ -49,7 +49,7 @@ Clone the repository and run:
 
 ```sh
 uv sync
-uvx prek install
+uv run pre-commit install
 ```
 
 See `Makefile` for other useful commands.
