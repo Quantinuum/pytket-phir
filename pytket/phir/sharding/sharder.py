@@ -231,17 +231,16 @@ class Sharder:
         logger.debug("... dependencies marked")
 
     def _cleanup_remaining_commands(self) -> None:
-        """Cleans up any remaining subcommands.
-
-        This is done by creating a superfluous Barrier command that serves just
-        to roll up lingering subcommands.
-        """
+        """Flush pending subcommands by creating synthetic Barrier commands."""
         remaining_qubits = [k for k, v in self._pending_commands.items() if v]
         logger.debug(
             "Cleaning up remaining subcommands for qubits %s", remaining_qubits
         )
         for qubit in remaining_qubits:
-            logger.debug("Adding barrier for subcommands for qubit %s", qubit)
+            logger.debug(
+                "Creating synthetic barrier to flush subcommands for qubit %s",
+                qubit,
+            )
             barrier_command = Command(Op.create(OpType.Barrier), [qubit])
             self._build_shard(barrier_command)
 
