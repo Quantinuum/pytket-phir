@@ -9,6 +9,7 @@
 # mypy: disable-error-code="misc"
 
 import logging
+from collections import defaultdict
 from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
 
@@ -60,20 +61,14 @@ def _validate_circuit_registers(circuit: "Circuit") -> None:
         IncompleteRegisterError: If the circuit contains incomplete registers
     """
     # Group qubits by register name
-    qubit_registers: dict[str, set[int]] = {}
-    for qubit in circuit.qubits:
-        reg_name = qubit.reg_name
-        if reg_name not in qubit_registers:
-            qubit_registers[reg_name] = set()
-        qubit_registers[reg_name].add(qubit.index[0])
+    qubit_registers: dict[str, set[int]] = defaultdict(set)
+    for qubit in circuit.qubits:  # noqa: FURB142, RUF100
+        qubit_registers[qubit.reg_name].add(qubit.index[0])
 
     # Group bits by register name
-    bit_registers: dict[str, set[int]] = {}
-    for bit in circuit.bits:
-        reg_name = bit.reg_name
-        if reg_name not in bit_registers:
-            bit_registers[reg_name] = set()
-        bit_registers[reg_name].add(bit.index[0])
+    bit_registers: dict[str, set[int]] = defaultdict(set)
+    for bit in circuit.bits:  # noqa: FURB142, RUF100
+        bit_registers[bit.reg_name].add(bit.index[0])
 
     # Check for incomplete qubit registers
     incomplete_qubits = []
