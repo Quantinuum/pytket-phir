@@ -11,8 +11,9 @@
 import logging
 
 import pytest
+from pytket.circuit import Bit, Circuit, Qubit
 
-from pytket.phir.api import pytket_to_phir, qasm_to_phir
+from pytket.phir.api import IncompleteRegisterError, pytket_to_phir, qasm_to_phir
 from pytket.phir.qtm_machine import QtmMachine
 
 from .test_utils import QasmFile, get_qasm_as_circuit
@@ -63,3 +64,74 @@ class TestApi:
         """
 
         assert qasm_to_phir(qasm, QtmMachine.H1)
+    def test_incomplete_qubit_register(self) -> None:
+        """Test that incomplete qubit registers are rejected.
+        
+        From https://github.com/Quantinuum/pytket-phir/issues/242
+        """
+        circ = Circuit()
+        circ.add_qubit(Qubit(1))
+        circ.add_bit(Bit(1))
+        circ.H(1)
+        circ.Measure(1, 1)
+
+        with pytest.raises(
+            IncompleteRegisterError,
+            match=r".*incomplete qubit registers.*incomplete bit registers.*",
+        ):
+            pytket_to_phir(circ)
+
+    def test_incomplete_qubit_register_with_gap(self) -> None:
+        """Test that qubit registers with gaps are rejected."""
+        circ = Circuit()
+        circ.add_qubit(Qubit(0))
+        circ.add_qubit(Qubit(2))
+        circ.H(0)
+        circ.H(2)
+
+        with pytest.raises(
+            IncompleteRegisterError, match=r".*incomplete qubit registers.*"
+        ):
+            pytket_to_phir(circ)
+
+    def test_incomplete_bit_register(self) -> None:
+        """Test that incomplete bit registers are rejected."""
+        circ = Circuit()
+        circ.add_q_register("q", 2)
+        circ.add_bit(Bit(1))
+        circ.H(0)
+        circ.Measure(0, 1)
+
+        with pytest.raises(
+            IncompleteRegisterError, match=r".*incomplete bit registers.*"
+        ):
+            pytket_to_phir(circ)
+
+    def test_complete_registers_accepted(self) -> None:
+        """Test that complete registers are accepted."""
+        circ = Circuit()
+        circ.add_q_register("q", 2)
+        circ.add_c_register("c", 2)
+        circ.H(0)
+        circ.Measure(0, 0)
+
+        # Should not raise
+        assert pytket_to_phir(circ)
+
+    def test_empty_circuit_accepted(self) -> None:
+        """Test that empty circuits are accepted."""
+        circ = Circuit()
+
+        # Should not raise
+        assert pytket_to_phir(circ)
+
+    def test_multiple_complete_registers_accepted(self) -> None:
+        """Test that multiple complete registers with different names are accepted."""
+        circ = Circuit()
+        circ.add_q_register("a", 2)
+        circ.add_q_register("b", 3)
+        circ.add_c_register("c", 1)
+        circ.add_c_register("d", 2)
+
+        # Should not raise
+        assert pytket_to_phir(circ)
