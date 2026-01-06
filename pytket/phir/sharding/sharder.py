@@ -116,9 +116,12 @@ class Sharder:
         logger.debug("Building shard for command: %s", command)
         # Rollup any sub commands (SQ gates) that interact with the same qubits
         sub_commands: dict[UnitID, list[Command]] = {}
-        for key in (
-            key for key in list(self._pending_commands) if key in command.qubits
-        ):
+        # Get qubits from command - use args if qubits is empty
+        # (e.g., for manually created barriers)
+        cmd_qubits = command.qubits or [
+            arg for arg in command.args if isinstance(arg, Qubit)
+        ]
+        for key in (key for key in list(self._pending_commands) if key in cmd_qubits):
             sub_commands[key] = self._pending_commands.pop(key)
 
         all_commands = [command]
@@ -126,7 +129,7 @@ class Sharder:
             all_commands.extend(sub_command_list)
 
         logger.debug("All shard commands: %s", all_commands)
-        qubits_used = set(command.qubits)
+        qubits_used = set(cmd_qubits)
         bits_written = set(command.bits)
         bits_read: set[Bit] = set()
 
@@ -228,22 +231,17 @@ class Sharder:
         logger.debug("... dependencies marked")
 
     def _cleanup_remaining_commands(self) -> None:
-        """Cleans up any remaining subcommands.
-
-        This is done by creating a superfluous Barrier command that serves just
-        to roll up lingering subcommands.
-        """
+        """Flush pending subcommands by creating synthetic Barrier commands."""
         remaining_qubits = [k for k, v in self._pending_commands.items() if v]
         logger.debug(
             "Cleaning up remaining subcommands for qubits %s", remaining_qubits
         )
         for qubit in remaining_qubits:
-            logger.debug("Adding barrier for subcommands for qubit %s", qubit)
-            self._circuit.add_barrier([qubit])
-            # Easiest way to get to a command, since there's no constructor. Could
-            # create an entire orphan circuit with the matching qubits and the barrier
-            # instead, if this has unintended consequences
-            barrier_command = self._circuit.get_commands()[-1]
+            logger.debug(
+                "Creating synthetic barrier to flush subcommands for qubit %s",
+                qubit,
+            )
+            barrier_command = Command(Op.create(OpType.Barrier), [qubit])
             self._build_shard(barrier_command)
 
     def _add_pending_sub_command(self, command: Command) -> None:
