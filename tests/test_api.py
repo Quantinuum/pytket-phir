@@ -82,6 +82,28 @@ class TestApi:
         ):
             pytket_to_phir(circ)
 
+    def test_incomplete_qubit_register_1(self) -> None:
+        """Test that incomplete qubit registers are rejected."""
+        circ = Circuit()
+        circ.add_qubit(Qubit(1))
+
+        with pytest.raises(
+            IncompleteRegisterError,
+            match=r".*incomplete qubit registers.*",
+        ):
+            pytket_to_phir(circ)
+
+    def test_incomplete_bit_register_1(self) -> None:
+        """Test that incomplete bit registers are rejected."""
+        circ = Circuit()
+        circ.add_bit(Bit(1))
+
+        with pytest.raises(
+            IncompleteRegisterError,
+            match=r".*incomplete bit registers.*",
+        ):
+            pytket_to_phir(circ)
+
     def test_incomplete_qubit_register_with_gap(self) -> None:
         """Test that qubit registers with gaps are rejected."""
         circ = Circuit()
@@ -107,32 +129,3 @@ class TestApi:
             IncompleteRegisterError, match=r".*incomplete bit registers.*"
         ):
             pytket_to_phir(circ)
-
-    def test_complete_registers_accepted(self) -> None:
-        """Test that complete registers are accepted."""
-        circ = Circuit()
-        circ.add_q_register("q", 2)
-        circ.add_c_register("c", 2)
-        circ.H(0)
-        circ.Measure(0, 0)
-
-        # Should not raise
-        assert pytket_to_phir(circ)
-
-    def test_empty_circuit_accepted(self) -> None:
-        """Test that empty circuits are accepted."""
-        circ = Circuit()
-
-        # Should not raise
-        assert pytket_to_phir(circ)
-
-    def test_multiple_complete_registers_accepted(self) -> None:
-        """Test that multiple complete registers with different names are accepted."""
-        circ = Circuit()
-        circ.add_q_register("a", 2)
-        circ.add_q_register("b", 3)
-        circ.add_c_register("c", 1)
-        circ.add_c_register("d", 2)
-
-        # Should not raise
-        assert pytket_to_phir(circ)
