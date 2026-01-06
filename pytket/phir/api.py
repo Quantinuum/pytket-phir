@@ -9,6 +9,7 @@
 # mypy: disable-error-code="misc"
 
 import logging
+from collections import defaultdict
 from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
 
@@ -32,6 +33,61 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+class IncompleteRegisterError(Exception):
+    """Exception raised when a circuit contains incomplete registers."""
+
+    def __init__(
+        self, incomplete_qubits: list[str], incomplete_bits: list[str]
+    ) -> None:
+        """Initialize the exception with details about incomplete registers."""
+        msg_parts = []
+        if incomplete_qubits:
+            msg_parts.append(f"incomplete qubit registers: {incomplete_qubits}")
+        if incomplete_bits:
+            msg_parts.append(f"incomplete bit registers: {incomplete_bits}")
+        msg = (
+            "Circuit contains "
+            + " and ".join(msg_parts)
+            + ". All qubits and bits must form complete registers "
+            + "starting from index 0."
+        )
+        super().__init__(msg)
+
+
+def _validate_circuit_registers(circuit: "Circuit") -> None:
+    """Validate that all qubits and bits form complete registers.
+
+    Raises:
+        IncompleteRegisterError: If the circuit contains incomplete registers
+    """
+    # Group qubits by register name
+    qubit_registers: dict[str, set[int]] = defaultdict(set)
+    for qubit in circuit.qubits:  # noqa: FURB142, RUF100
+        qubit_registers[qubit.reg_name].add(qubit.index[0])
+
+    # Group bits by register name
+    bit_registers: dict[str, set[int]] = defaultdict(set)
+    for bit in circuit.bits:  # noqa: FURB142, RUF100
+        bit_registers[bit.reg_name].add(bit.index[0])
+
+    # Check for incomplete qubit registers
+    incomplete_qubits = []
+    for reg_name, indices in qubit_registers.items():
+        expected_indices = set(range(len(indices)))
+        if indices != expected_indices:
+            incomplete_qubits.append(f"{reg_name}{sorted(indices)}")
+
+    # Check for incomplete bit registers
+    incomplete_bits = []
+    for reg_name, indices in bit_registers.items():
+        expected_indices = set(range(len(indices)))
+        if indices != expected_indices:
+            incomplete_bits.append(f"{reg_name}{sorted(indices)}")
+
+    if incomplete_qubits or incomplete_bits:
+        raise IncompleteRegisterError(incomplete_qubits, incomplete_bits)
+
+
 def pytket_to_phir(circuit: "Circuit", qtm_machine: QtmMachine | None = None) -> str:
     """Converts a pytket circuit into its PHIR representation.
 
@@ -43,8 +99,15 @@ def pytket_to_phir(circuit: "Circuit", qtm_machine: QtmMachine | None = None) ->
 
     Returns:
         PHIR JSON as a str
+
+    Raises:
+        IncompleteRegisterError: If the circuit contains incomplete registers
     """
     logger.info("Starting phir conversion process for circuit %s", circuit)
+
+    # Validate that all qubits and bits form complete registers
+    _validate_circuit_registers(circuit)
+
     machine: Machine | None = None
     if qtm_machine:
         logger.info("Rebasing to machine %s", qtm_machine)
