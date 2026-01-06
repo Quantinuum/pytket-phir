@@ -6,7 +6,7 @@
 #
 ##############################################################################
 
-# mypy: disable-error-code="misc"
+# mypy: disable-error-code="misc,import-not-found"
 # ruff: noqa: T201
 
 import logging
@@ -14,7 +14,7 @@ from argparse import ArgumentParser
 from importlib.metadata import version
 
 from pecos.engines.hybrid_engine import HybridEngine
-from pecos.foreign_objects.wasmtime import WasmtimeObj  # type:ignore  # noqa: PGH003
+from pecos.foreign_objects.wasmtime import WasmtimeObj
 from pytket.qasm.qasm import (
     circuit_from_qasm,
     circuit_from_qasm_wasm,
