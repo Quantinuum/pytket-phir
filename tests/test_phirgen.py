@@ -541,10 +541,16 @@ def test_xor_target() -> None:
     assert xor_ops[0]["returns"] == [["c", 2]], (
         f"First XOR should write to c[2], got {xor_ops[0]['returns']}"
     )
+    assert xor_ops[0]["args"] == [{"cop": "^", "args": [["c", 1], ["c", 0]]}], (
+        f"First XOR should read from c[1] and c[0], got {xor_ops[0]['args']}"
+    )
 
     # Second XOR should write to c[1]
     assert xor_ops[1]["returns"] == [["c", 1]], (
         f"Second XOR should write to c[1], got {xor_ops[1]['returns']}"
+    )
+    assert xor_ops[1]["args"] == [{"cop": "^", "args": [["c", 0], ["c", 1]]}], (
+        f"Second XOR should read from c[0] and c[1], got {xor_ops[1]['args']}"
     )
 
 
