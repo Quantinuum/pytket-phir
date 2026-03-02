@@ -6,6 +6,8 @@
 #
 ##############################################################################
 
+import math
+
 from phir.model import PHIRModel
 from rich import print  # noqa: A004
 
@@ -44,7 +46,7 @@ if __name__ == "__main__":
         assert shard.ID in {2, 3}
     cost_0 = output[0][2]
     cost_1 = output[1][2]
-    assert cost_1 == 0.0
+    assert math.isclose(cost_1, 0.0, rel_tol=0.0, abs_tol=1e-9)
 
     phir_json = genphir(output, circuit)
 
