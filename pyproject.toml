@@ -74,3 +74,8 @@ version_scheme = "python-simplified-semver"
 
 [tool.refurb]
 python_version = "3.10"
+
+[tool.typos.files]
+extend-exclude = [
+  "ruff.toml",
+]
