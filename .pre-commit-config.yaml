@@ -18,7 +18,7 @@ repos:
       - id: typos
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.4
+    rev: v0.15.8
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
@@ -28,19 +28,22 @@ repos:
     rev: v2.3.0
     hooks:
       - id: refurb
+        additional_dependencies:
+          - "mypy<1.20"
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+    rev: v1.20.0
     hooks:
-    - id: mypy
-      pass_filenames: false
-      args: [--package=pytket.phir, --package=tests]
-      additional_dependencies: [
-        phir,
-        pytest,
-        pytket-quantinuum,
-        pytket,
-        quantum-pecos>=0.5.0.dev8,
-        types-setuptools,
-        wasmtime,
-      ]
+      - id: mypy
+        pass_filenames: false
+        args: [--package=pytket.phir, --package=tests]
+        additional_dependencies:
+          [
+            phir,
+            pytest,
+            pytket-quantinuum,
+            pytket,
+            quantum-pecos>=0.5.0.dev8,
+            types-setuptools,
+            wasmtime,
+          ]

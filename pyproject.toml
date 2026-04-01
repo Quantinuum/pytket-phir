@@ -28,8 +28,8 @@ classifiers = [
 dynamic = ["version"]
 dependencies = [
   "phir>=0.3.3",
-  "pytket>=2.0.0",
-  "wasmtime>=29.0.0",
+  "pytket>=2.16.0",
+  "wasmtime>=43.0.0",
 ]
 
 [dependency-groups]

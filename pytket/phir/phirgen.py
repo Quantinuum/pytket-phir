@@ -42,6 +42,7 @@ from phir.model import PHIRModel
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    from pytket._tket.circuit import BarrierOp, ClassicalEvalOp, CopyBitsOp, WASMOp
     from pytket.circuit import Circuit, WiredClExpr
     from pytket.unit_id import UnitID
 
@@ -62,6 +63,10 @@ UINTMAX = 2**WORDSIZE - 1
 
 Var: TypeAlias = str
 Bit: TypeAlias = list[Var | int]  # e.g. [c, 0] for c[0]
+BarrierOp = vars(tk)["BarrierOp"]
+ClassicalEvalOp = vars(tk)["ClassicalEvalOp"]
+CopyBitsOp = vars(tk)["CopyBitsOp"]
+WASMOp = vars(tk)["WASMOp"]
 
 tket_gate_to_phir = {
     tk.OpType.Reset:    "Init",
@@ -254,13 +259,13 @@ def cop_from_op_name(op_name: str) -> str:
     return cop
 
 
-def convert_classicalevalop(op: tk.ClassicalEvalOp, cmd: tk.Command) -> JsonDict | None:  # noqa: PLR0912
+def convert_classicalevalop(op: "ClassicalEvalOp", cmd: tk.Command) -> JsonDict | None:  # noqa: PLR0912
     """Return PHIR dict for a pytket ClassicalEvalOp."""
     # Exclude conditional bits from args
     args = cmd.args[cmd.op.width :] if isinstance(cmd.op, tk.Conditional) else cmd.args
     out: JsonDict | None = None
     match op:
-        case tk.CopyBitsOp():
+        case CopyBitsOp():
             if len(cmd.bits) != len(args) // 2:
                 msg = "LHS and RHS lengths mismatch for CopyBits"
                 raise TypeError(msg)
@@ -487,7 +492,7 @@ def convert_subcmd(op: tk.Op, cmd: tk.Command) -> JsonDict | None:  # noqa: PLR0
                 "true_branch": [convert_subcmd(op.op, cmd)],
             }
 
-        case tk.BarrierOp():
+        case BarrierOp():
             if op.data:
                 # See https://github.com/quantinuum/tket/blob/0ec603986821d994caa3a0fb9c4640e5bc6c0a24/pytket/pytket/qasm/qasm.py#L419-L459
                 match op.data[0:5]:
@@ -526,10 +531,10 @@ def convert_subcmd(op: tk.Op, cmd: tk.Command) -> JsonDict | None:  # noqa: PLR0
                 return assign_cop([cmd_args[output_posn[0]].reg_name], rhs)
             return assign_cop([arg_to_bit(cmd_args[output_posn[0]])], rhs)
 
-        case tk.ClassicalEvalOp():
+        case ClassicalEvalOp():
             return convert_classicalevalop(op, cmd)
 
-        case tk.WASMOp():
+        case WASMOp():
             return create_wasm_op(cmd, op)
 
         case _:
@@ -571,7 +576,7 @@ def append_cmd(cmd: tk.Command, ops: list[JsonDict]) -> None:
         ops.append(op)
 
 
-def create_wasm_op(cmd: tk.Command, wasm_op: tk.WASMOp) -> JsonDict:
+def create_wasm_op(cmd: tk.Command, wasm_op: "WASMOp") -> JsonDict:
     """Creates a PHIR operation for a WASM command."""
     args, returns = extract_wasm_args_and_returns(cmd, wasm_op)
     op = {
@@ -589,7 +594,7 @@ def create_wasm_op(cmd: tk.Command, wasm_op: tk.WASMOp) -> JsonDict:
 
 
 def extract_wasm_args_and_returns(
-    command: tk.Command, op: tk.WASMOp
+    command: tk.Command, op: "WASMOp"
 ) -> tuple[list[str], list[str]]:
     """Extract the wasm args and return values as whole register names."""
     # This slice removes the extra `_w` cregs (wires) that are not part of the
@@ -620,16 +625,16 @@ def make_comment_text(cmd: tk.Command, op: tk.Op) -> str:
             conditional_text = str(cmd)
             cleaned = (
                 conditional_text[: conditional_text.find("THEN") + 5]
-                if isinstance(op.op, tk.WASMOp)
+                if isinstance(op.op, WASMOp)
                 else ""
             )
             comment = f"{cleaned}{make_comment_text(cmd, op.op)}"
 
-        case tk.WASMOp():
+        case WASMOp():
             args, returns = extract_wasm_args_and_returns(cmd, op)
             comment = f"WASM_function='{op.func_name}' args={args} returns={returns};"
 
-        case tk.BarrierOp():
+        case BarrierOp():
             comment = op.data + " " + str(cmd.args[0]) + ";" if op.data else str(cmd)
 
         case tk.ClExprOp():
