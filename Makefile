@@ -1,4 +1,4 @@
-.PHONY: install dev dev-all tests lint docs clean build
+.PHONY: install dev dev-all tests lint audit docs clean build
 
 install:
 	uv pip install .
@@ -15,6 +15,9 @@ tests:
 
 lint:
 	uv run pre-commit run --all-files
+
+audit:
+	uv audit --locked
 
 docs:
 	# uv run sphinx-apidoc --implicit-namespaces -f -o docs/source/ pytket

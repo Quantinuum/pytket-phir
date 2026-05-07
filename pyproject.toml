@@ -42,6 +42,9 @@ dev = [
   "sphinx>8.1",
 ]
 
+[tool.uv]
+exclude-newer = "7 days"
+
 [project.scripts]
 phirc = "pytket.phir.cli:main"
 
