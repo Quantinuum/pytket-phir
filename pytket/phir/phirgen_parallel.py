@@ -6,8 +6,6 @@
 #
 ##############################################################################
 
-# mypy: disable-error-code="misc"
-
 import json
 import logging
 from collections import OrderedDict
@@ -131,7 +129,7 @@ def process_sub_commands(  # noqa: PLR0912
 def groups2qops(groups: dict[int, list[tk.Command]], ops: list["JsonDict"]) -> None:  # noqa: PLR0912
     """Convert the groups of parallel ops to properly formatted PHIR."""
     for group in groups.values():
-        angles2qops: dict[tuple[float, ...], JsonDict] = {}
+        angles2qops: dict[tuple[object, ...], JsonDict] = {}
         for qop in group:
             if not qop.op.is_gate():
                 append_cmd(qop, ops)

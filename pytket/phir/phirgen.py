@@ -6,8 +6,6 @@
 #
 ##############################################################################
 
-# mypy: disable-error-code="misc"
-
 import json
 import logging
 import sys

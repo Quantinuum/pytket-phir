@@ -6,7 +6,6 @@
 #
 ##############################################################################
 
-# mypy: disable-error-code="misc,import-not-found"
 # ruff: noqa: T201
 
 import logging

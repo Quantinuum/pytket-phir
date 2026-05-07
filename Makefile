@@ -1,20 +1,20 @@
 .PHONY: install dev dev-all tests lint audit docs clean build
 
 install:
-	uv pip install .
+	uv sync --no-dev
 
 dev:
-	uv pip install -e .
+	uv sync --dev
 
 dev-all:
-	uv pip install -e .[phirc]
+	uv sync --dev --extra phirc
 
 tests:
 	uv run python tests/e2e_test.py
 	uv run pytest -s -x -vv tests/test*.py
 
 lint:
-	uv run pre-commit run --all-files
+	uv run prek run --all-files
 
 audit:
 	uv audit --locked
