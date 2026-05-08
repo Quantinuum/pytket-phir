@@ -6,8 +6,6 @@
 #
 ##############################################################################
 
-# mypy: disable-error-code="misc"
-
 import logging
 
 from .test_utils import QasmFile, get_phir_json

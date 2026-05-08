@@ -135,9 +135,7 @@ class Sharder:
 
         for sub_command in all_commands:
             bits_written.update(sub_command.bits)
-            bits_read.update(
-                set(filter(lambda x: isinstance(x, Bit), sub_command.args)),  # type: ignore [misc, arg-type]
-            )
+            bits_read.update(arg for arg in sub_command.args if isinstance(arg, Bit))
 
         # Handle dependency calculations
         depends_upon = self._resolve_shard_dependencies(

@@ -6,8 +6,6 @@
 #
 ##############################################################################
 
-# mypy: disable-error-code="misc"
-
 import logging
 from collections import defaultdict
 from tempfile import NamedTemporaryFile

@@ -49,7 +49,7 @@ Clone the repository and run:
 
 ```sh
 uv sync
-uv run pre-commit install
+uv run prek install
 ```
 
 See `Makefile` for other useful commands.
@@ -57,3 +57,7 @@ See `Makefile` for other useful commands.
 ## Testing
 
 Issue `make tests` from the root directory.
+
+## Dependency Audit
+
+Use `make audit` or `uv audit --locked` to scan locked dependencies for known vulnerabilities. The project configures uv with a 7-day dependency cooldown so routine dependency resolution avoids newly uploaded packages while the package ecosystem has time to discover and report supply-chain compromises.

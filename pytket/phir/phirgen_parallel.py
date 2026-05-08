@@ -6,12 +6,10 @@
 #
 ##############################################################################
 
-# mypy: disable-error-code="misc"
-
 import json
 import logging
 from collections import OrderedDict
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeAlias
 
 import pytket.circuit as tk
 
@@ -22,12 +20,14 @@ from .phirgen import PHIR_HEADER, append_cmd, arg_to_bit, get_decls, tket_gate_t
 if TYPE_CHECKING:
     from pytket.circuit import Circuit
     from pytket.unit_id import UnitID
+    from sympy import Expr
 
     from .machine import Machine
     from .phirgen import JsonDict
     from .sharding.shard import Cost, Ordering, Shard, ShardLayer
 
 logger = logging.getLogger(__name__)
+AngleKey: TypeAlias = "tuple[int | float | Expr, ...]"
 
 
 def exec_order_preserved(
@@ -131,7 +131,7 @@ def process_sub_commands(  # noqa: PLR0912
 def groups2qops(groups: dict[int, list[tk.Command]], ops: list["JsonDict"]) -> None:  # noqa: PLR0912
     """Convert the groups of parallel ops to properly formatted PHIR."""
     for group in groups.values():
-        angles2qops: dict[tuple[float, ...], JsonDict] = {}
+        angles2qops: dict[AngleKey, JsonDict] = {}
         for qop in group:
             if not qop.op.is_gate():
                 append_cmd(qop, ops)
