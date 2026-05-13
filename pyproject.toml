@@ -45,6 +45,7 @@ dev = [
 
 [tool.uv]
 exclude-newer = "7 days"
+exclude-newer-package = { requests = false, urllib3 = false }
 
 [project.scripts]
 phirc = "pytket.phir.cli:main"
