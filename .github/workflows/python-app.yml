@@ -29,7 +29,11 @@ jobs:
         python-version: ${{ matrix.python-version }}
         enable-cache: true
     - name: Dependency vulnerability audit
+      if: ${{ matrix.deploy-gh-pages }}
+      continue-on-error: true
       run: |
+        # Work around astral-sh/uv#19492 until `uv audit` can handle malformed
+        # OSV responses without aborting the entire workflow.
         uv audit --locked
     - name: Install dependencies
       run: |
