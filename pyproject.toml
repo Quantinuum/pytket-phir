@@ -37,7 +37,7 @@ dev = [
   "networkx<3",
   "prek>=0.3.11",
   "pydata-sphinx-theme>=0.16.1",
-  "pytest==9.0.3",
+  "pytest==9.1.1",
   "rich>=13.0",
   "sphinx>8.1",
   "ty>=0.0.33",
