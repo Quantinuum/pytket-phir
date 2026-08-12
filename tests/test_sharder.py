@@ -148,7 +148,7 @@ class TestSharder:
         assert shards[4].bits_written == {circuit.bits[0]}
         assert shards[4].depends_upon == {shards[0].ID, shards[3].ID}
 
-    def test_complex_barriers(self) -> None:  # noqa: PLR0915
+    def test_complex_barriers(self) -> None:  # ruff: ignore[too-many-statements]
         circuit = get_qasm_as_circuit(QasmFile.barrier_complex)
         shards = Sharder(circuit).shard()
 

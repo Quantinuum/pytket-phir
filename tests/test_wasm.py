@@ -118,7 +118,7 @@ def test_pytket_with_wasm() -> None:
         "returns": ["c2"],
     }
     assert phir["ops"][8] == {
-        "//": "IF ([c1[0]] == 1) THEN WASM_function='add_one' args=['c0'] returns=['c0'];"  # noqa: E501
+        "//": "IF ([c1[0]] == 1) THEN WASM_function='add_one' args=['c0'] returns=['c0'];"  # ruff: ignore[line-too-long]
     }
     assert phir["ops"][9] == {
         "block": "if",

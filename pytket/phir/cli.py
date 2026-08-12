@@ -6,7 +6,7 @@
 #
 ##############################################################################
 
-# ruff: noqa: T201
+# ruff: file-ignore[print]
 
 import logging
 from argparse import ArgumentParser

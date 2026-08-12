@@ -9,7 +9,7 @@
 import math
 
 from phir.model import PHIRModel
-from rich import print  # noqa: A004
+from rich import print  # ruff: ignore[builtin-import-shadowing]
 
 from pytket.phir.machine import Machine, MachineTimings
 from pytket.phir.phirgen import genphir

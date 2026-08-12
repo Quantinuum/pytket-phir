@@ -47,7 +47,7 @@ def exec_order_preserved(
     )
 
 
-def process_sub_commands(  # noqa: PLR0912
+def process_sub_commands(  # ruff: ignore[too-many-branches]
     sub_commands: dict["UnitID", list[tk.Command]], max_parallel_sq_gates: int
 ) -> dict[int, list[tk.Command]]:
     """Create parallelizable groups of sub-commands."""
@@ -128,7 +128,7 @@ def process_sub_commands(  # noqa: PLR0912
     return dict(groups.items())
 
 
-def groups2qops(groups: dict[int, list[tk.Command]], ops: list["JsonDict"]) -> None:  # noqa: PLR0912
+def groups2qops(groups: dict[int, list[tk.Command]], ops: list["JsonDict"]) -> None:  # ruff: ignore[too-many-branches]
     """Convert the groups of parallel ops to properly formatted PHIR."""
     for group in groups.values():
         angles2qops: dict[AngleKey, JsonDict] = {}
@@ -201,7 +201,7 @@ def process_shards(
         if group_available:
             group_number = types2groups[shard.primary_command.op.type]
             group = groups[group_number]
-            tq_case = (num_args == 2) and (len(group) < max_parallel_tq_gates)  # noqa: PLR2004
+            tq_case = (num_args == 2) and (len(group) < max_parallel_tq_gates)  # ruff: ignore[magic-value-comparison]
             sq_case = (num_args == 1) and (len(group) < max_parallel_sq_gates)
             if tq_case or sq_case:
                 group_not_full = True
