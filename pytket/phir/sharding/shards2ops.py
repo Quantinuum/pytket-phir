@@ -45,7 +45,7 @@ def parse_shards_naive(
             # 3 or more will be 3 or more parallel sq ops
             # when iterating through qubits,
             # map all the qubits to a unique id to prevent duplicates in placement
-            if len(shard.qubits_used) != 2:  # noqa: PLR2004
+            if len(shard.qubits_used) != 2:  # ruff: ignore[magic-value-comparison]
                 for qubit in shard.qubits_used:
                     qid, qid_count = get_qid(qubit, qubits2ids, qid_count)
                     op = [qid]

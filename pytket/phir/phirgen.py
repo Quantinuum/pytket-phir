@@ -116,7 +116,7 @@ def assign_cop(
     }
 
 
-def classical_op(exp: LogicExp, *, bitwise: bool = False) -> JsonDict | int:  # noqa: PLR0912, PLR0915
+def classical_op(exp: LogicExp, *, bitwise: bool = False) -> JsonDict | int:  # ruff: ignore[too-many-branches, too-many-statements]
     """PHIR for classical register operations."""
     match exp.op:
         # Nullary
@@ -257,7 +257,7 @@ def cop_from_op_name(op_name: str) -> str:
     return cop
 
 
-def convert_classicalevalop(op: "ClassicalEvalOp", cmd: tk.Command) -> JsonDict | None:  # noqa: PLR0912
+def convert_classicalevalop(op: "ClassicalEvalOp", cmd: tk.Command) -> JsonDict | None:  # ruff: ignore[too-many-branches]
     """Return PHIR dict for a pytket ClassicalEvalOp."""
     # Exclude conditional bits from args
     args = cmd.args[cmd.op.width :] if isinstance(cmd.op, tk.Conditional) else cmd.args
@@ -388,7 +388,7 @@ def multi_bit_condition(args: "list[UnitID]", value: int) -> JsonDict:
     return nested_cop("&", deque(args), deque(map(int, f"{value:0{len(args)}b}")))
 
 
-def get_cop_from_op(op: ClOp) -> str | int:  # noqa: PLR0912
+def get_cop_from_op(op: ClOp) -> str | int:  # ruff: ignore[too-many-branches]
     """Get PHIR classical op name from ClOp."""
     cop: str | int
     match op:
@@ -462,7 +462,7 @@ def phir_from_clexpr_arg(
             ):
                 logger.error("Register variable not aligned with any register")
             return reg_name
-    assert isinstance(expr_arg, ClExpr)  # noqa: S101
+    assert isinstance(expr_arg, ClExpr)  # ruff: ignore[assert]
 
     cop = get_cop_from_op(expr_arg.op)
     if isinstance(cop, int):
@@ -473,7 +473,7 @@ def phir_from_clexpr_arg(
     return {"cop": cop, "args": args}
 
 
-def convert_subcmd(op: tk.Op, cmd: tk.Command) -> JsonDict | None:  # noqa: PLR0912
+def convert_subcmd(op: tk.Op, cmd: tk.Command) -> JsonDict | None:  # ruff: ignore[too-many-branches]
     """Return PHIR dict given a tket op and its arguments."""
     if op.is_gate():
         return convert_gate(op, cmd)

@@ -12,7 +12,7 @@ from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
 
 from pytket.qasm.qasm import circuit_from_qasm_str, circuit_from_qasm_wasm
-from rich import print  # noqa: A004
+from rich import print  # ruff: ignore[builtin-import-shadowing]
 
 from phir.model import PHIRModel
 
@@ -60,12 +60,12 @@ def _validate_circuit_registers(circuit: "Circuit") -> None:
     """
     # Group qubits by register name
     qubit_registers: dict[str, set[int]] = defaultdict(set)
-    for qubit in circuit.qubits:  # noqa: FURB142, RUF100
+    for qubit in circuit.qubits:  # ruff: noqa: FURB142, RUF100
         qubit_registers[qubit.reg_name].add(qubit.index[0])
 
     # Group bits by register name
     bit_registers: dict[str, set[int]] = defaultdict(set)
-    for bit in circuit.bits:  # noqa: FURB142, RUF100
+    for bit in circuit.bits:  # ruff: noqa: FURB142, RUF100
         bit_registers[bit.reg_name].add(bit.index[0])
 
     # Check for incomplete qubit registers
