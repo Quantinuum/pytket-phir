@@ -12,7 +12,6 @@ from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
 
 from pytket.qasm.qasm import circuit_from_qasm_str, circuit_from_qasm_wasm
-from rich import print  # ruff: ignore[builtin-import-shadowing]
 
 from phir.model import PHIRModel
 
@@ -128,9 +127,8 @@ def pytket_to_phir(circuit: "Circuit", qtm_machine: QtmMachine | None = None) ->
         phir_json = genphir_parallel(placed, circuit, machine)
     else:
         phir_json = genphir(placed, circuit, machine_ops=bool(machine))
-    if logger.getEffectiveLevel() <= logging.INFO:
-        print("PHIR JSON:")
-        print(PHIRModel.model_validate_json(phir_json))
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("PHIR JSON:\n%s", PHIRModel.model_validate_json(phir_json))
     return phir_json
 
 
