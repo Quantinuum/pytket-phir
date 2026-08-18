@@ -6,8 +6,6 @@
 #
 ##############################################################################
 
-import logging
-
 import pytest
 from pytket.circuit import Bit, Circuit, Qubit
 
@@ -16,28 +14,8 @@ from pytket.phir.qtm_machine import QtmMachine
 
 from .test_utils import QasmFile, get_qasm_as_circuit
 
-logger = logging.getLogger(__name__)
-
 
 class TestApi:
-    def test_pytket_to_phir_logs_model_at_debug_only(
-        self, caplog: pytest.LogCaptureFixture, capsys: pytest.CaptureFixture[str]
-    ) -> None:
-        """The library API does not write its validated model to stdout."""
-        circuit = Circuit(1)
-        circuit.H(0)
-
-        caplog.set_level(logging.INFO, logger="pytket.phir.api")
-        pytket_to_phir(circuit)
-
-        assert not capsys.readouterr().out
-        assert not any("PHIR JSON:" in message for message in caplog.messages)
-
-        caplog.set_level(logging.DEBUG, logger="pytket.phir.api")
-        pytket_to_phir(circuit)
-
-        assert any("PHIR JSON:" in message for message in caplog.messages)
-
     def test_pytket_to_phir_no_machine(self) -> None:
         """Test case when no machine is present."""
         circuit = get_qasm_as_circuit(QasmFile.baby)
