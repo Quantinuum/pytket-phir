@@ -16,15 +16,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Minimum runtime requirements raised to `pytket>=2.16.0` and `wasmtime>=43.0.0`
+  (previously `pytket>=2.0.0` and `wasmtime>=29.0.0`) in
+  https://github.com/quantinuum/pytket-phir/pull/311. Upgrading may replace
+  older installations of these packages or surface resolver conflicts.
 * Add `uv` dependency audit in https://github.com/quantinuum/pytket-phir/pull/316
-* Routine dependency and GitHub Actions updates
+* Routine development dependency and GitHub Actions updates
 
 ## [0.10.1] - 2026-01-06
 
 ### Fixed
 
-* Ensure register decls and usage match in https://github.com/quantinuum/pytket-phir/pull/309
-* Converting circuits no longer changes the target bit of xor in https://github.com/quantinuum/pytket-phir/pull/308
+* Circuits with incomplete qubit or bit registers, i.e. registers that do not
+  start at index 0 or that contain gaps, are now rejected up front with the new
+  `IncompleteRegisterError` instead of producing PHIR whose declarations do not
+  match their usage, in https://github.com/quantinuum/pytket-phir/pull/309
+* `pytket_to_phir` no longer mutates the circuit passed to it. Previously,
+  circuits ending in pending single-qubit operations could acquire extra barrier
+  commands during conversion, which, among other symptoms, changed the target
+  bit of xor, in https://github.com/quantinuum/pytket-phir/pull/308
 
 ### Added
 
