@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-08-18
+
+### Fixed
+
+* Log PHIR models only at debug level in https://github.com/quantinuum/pytket-phir/pull/327
+* Resolve Dependabot alerts in https://github.com/quantinuum/pytket-phir/pull/326
+
+### Changed
+
+* Add `uv` dependency audit in https://github.com/quantinuum/pytket-phir/pull/316
+* Routine dependency and GitHub Actions updates
+
+## [0.10.1] - 2026-01-06
+
+### Fixed
+
+* Ensure register decls and usage match in https://github.com/quantinuum/pytket-phir/pull/309
+* Converting circuits no longer changes the target bit of xor in https://github.com/quantinuum/pytket-phir/pull/308
+
+### Added
+
+* Support Python 3.14 in https://github.com/quantinuum/pytket-phir/pull/301
+
 ## [0.10.0] - 2025-02-28
 
 * Update to pytket 2 by @cqc-alec in https://github.com/quantinuum/pytket-phir/pull/289
@@ -259,6 +282,8 @@ First release.
 [0.9.1]: https://github.com/quantinuum/pytket-phir/compare/v0.9.0...v0.9.1
 [0.9.2]: https://github.com/quantinuum/pytket-phir/compare/v0.9.1...v0.9.2
 [0.10.0]: https://github.com/quantinuum/pytket-phir/compare/v0.9.2...v0.10.0
-[unreleased]: https://github.com/quantinuum/pytket-phir/compare/v0.10.0...HEAD
+[0.10.1]: https://github.com/quantinuum/pytket-phir/compare/v0.10.0...v0.10.1
+[0.10.2]: https://github.com/quantinuum/pytket-phir/compare/v0.10.1...v0.10.2
+[unreleased]: https://github.com/quantinuum/pytket-phir/compare/v0.10.2...HEAD
 
 <!-- markdownlint-configure-file {"MD024": {"siblings_only" : true}, "MD034": false} -->
