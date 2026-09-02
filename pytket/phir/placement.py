@@ -50,7 +50,7 @@ def placement_check(
 
     # assume ops look like this [[1,2],[3],[4],[5,6],[7],[8],[9,10]]
     for op in ops:
-        if len(op) == 2:  # tq operation   # noqa: PLR2004
+        if len(op) == 2:  # tq operation   # ruff: ignore[magic-value-comparison]
             q1, q2 = op[0], op[1]
             # check that the q1 is next to q2 and they are in the right zone
             zone = (inv[q1] in tq_options) | (inv[q2] in tq_options)
@@ -114,7 +114,7 @@ def place_tq_ops(
     return order
 
 
-def place(  # noqa: PLR0912
+def place(  # ruff: ignore[too-many-branches]
     ops: list[list[int]],
     tq_options: set[int],
     sq_options: set[int],
@@ -133,7 +133,7 @@ def place(  # noqa: PLR0912
 
     # get separate lists of tq and sq operations
     for op in ops:
-        if len(op) == 2:  # tq operation  # noqa: PLR2004
+        if len(op) == 2:  # tq operation  # ruff: ignore[magic-value-comparison]
             tq_ops.append(op)
         else:  # sq_operation
             sq_ops.append(op)
@@ -200,7 +200,7 @@ def optimized_place(
 
     # get separate lists of tq and sq operations
     for op in ops:
-        if len(op) == 2:  # tq operation  # noqa: PLR2004
+        if len(op) == 2:  # tq operation  # ruff: ignore[magic-value-comparison]
             tq_ops.append(op)
         else:  # sq_operation
             sq_ops.append(op)

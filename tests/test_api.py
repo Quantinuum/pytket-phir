@@ -6,8 +6,6 @@
 #
 ##############################################################################
 
-import logging
-
 import pytest
 from pytket.circuit import Bit, Circuit, Qubit
 
@@ -15,8 +13,6 @@ from pytket.phir.api import IncompleteRegisterError, pytket_to_phir, qasm_to_phi
 from pytket.phir.qtm_machine import QtmMachine
 
 from .test_utils import QasmFile, get_qasm_as_circuit
-
-logger = logging.getLogger(__name__)
 
 
 class TestApi:

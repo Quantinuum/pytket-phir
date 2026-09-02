@@ -12,7 +12,6 @@ from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
 
 from pytket.qasm.qasm import circuit_from_qasm_str, circuit_from_qasm_wasm
-from rich import print  # noqa: A004
 
 from phir.model import PHIRModel
 
@@ -60,12 +59,12 @@ def _validate_circuit_registers(circuit: "Circuit") -> None:
     """
     # Group qubits by register name
     qubit_registers: dict[str, set[int]] = defaultdict(set)
-    for qubit in circuit.qubits:  # noqa: FURB142, RUF100
+    for qubit in circuit.qubits:  # ruff: noqa: FURB142, RUF100
         qubit_registers[qubit.reg_name].add(qubit.index[0])
 
     # Group bits by register name
     bit_registers: dict[str, set[int]] = defaultdict(set)
-    for bit in circuit.bits:  # noqa: FURB142, RUF100
+    for bit in circuit.bits:  # ruff: noqa: FURB142, RUF100
         bit_registers[bit.reg_name].add(bit.index[0])
 
     # Check for incomplete qubit registers
@@ -128,9 +127,8 @@ def pytket_to_phir(circuit: "Circuit", qtm_machine: QtmMachine | None = None) ->
         phir_json = genphir_parallel(placed, circuit, machine)
     else:
         phir_json = genphir(placed, circuit, machine_ops=bool(machine))
-    if logger.getEffectiveLevel() <= logging.INFO:
-        print("PHIR JSON:")
-        print(PHIRModel.model_validate_json(phir_json))
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("PHIR JSON:\n%s", PHIRModel.model_validate_json(phir_json))
     return phir_json
 
 

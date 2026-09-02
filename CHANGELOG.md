@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-08-18
+
+### Fixed
+
+* Log PHIR models only at debug level in https://github.com/quantinuum/pytket-phir/pull/327
+* Resolve Dependabot alerts in https://github.com/quantinuum/pytket-phir/pull/326
+
+### Changed
+
+* Minimum runtime requirements raised to `pytket>=2.16.0` and `wasmtime>=43.0.0`
+  (previously `pytket>=2.0.0` and `wasmtime>=29.0.0`) in
+  https://github.com/quantinuum/pytket-phir/pull/311. Upgrading may replace
+  older installations of these packages or surface resolver conflicts.
+* Add `uv` dependency audit in https://github.com/quantinuum/pytket-phir/pull/316
+* Routine development dependency and GitHub Actions updates
+
+## [0.10.1] - 2026-01-06
+
+### Fixed
+
+* Circuits with incomplete qubit or bit registers, i.e. registers that do not
+  start at index 0 or that contain gaps, are now rejected up front with the new
+  `IncompleteRegisterError` instead of producing PHIR whose declarations do not
+  match their usage, in https://github.com/quantinuum/pytket-phir/pull/309
+* `pytket_to_phir` no longer mutates the circuit passed to it. Previously,
+  circuits ending in pending single-qubit operations could acquire extra barrier
+  commands during conversion, which, among other symptoms, changed the target
+  bit of xor, in https://github.com/quantinuum/pytket-phir/pull/308
+
+### Added
+
+* Support Python 3.14 in https://github.com/quantinuum/pytket-phir/pull/301
+
 ## [0.10.0] - 2025-02-28
 
 * Update to pytket 2 by @cqc-alec in https://github.com/quantinuum/pytket-phir/pull/289
@@ -259,6 +292,8 @@ First release.
 [0.9.1]: https://github.com/quantinuum/pytket-phir/compare/v0.9.0...v0.9.1
 [0.9.2]: https://github.com/quantinuum/pytket-phir/compare/v0.9.1...v0.9.2
 [0.10.0]: https://github.com/quantinuum/pytket-phir/compare/v0.9.2...v0.10.0
-[unreleased]: https://github.com/quantinuum/pytket-phir/compare/v0.10.0...HEAD
+[0.10.1]: https://github.com/quantinuum/pytket-phir/compare/v0.10.0...v0.10.1
+[0.10.2]: https://github.com/quantinuum/pytket-phir/compare/v0.10.1...v0.10.2
+[unreleased]: https://github.com/quantinuum/pytket-phir/compare/v0.10.2...HEAD
 
 <!-- markdownlint-configure-file {"MD024": {"siblings_only" : true}, "MD034": false} -->
