@@ -121,7 +121,8 @@ class Sharder:
         cmd_qubits = command.qubits or [
             arg for arg in command.args if isinstance(arg, Qubit)
         ]
-        for key in (key for key in list(self._pending_commands) if key in cmd_qubits):
+        keys_to_process = [key for key in self._pending_commands if key in cmd_qubits]
+        for key in keys_to_process:
             sub_commands[key] = self._pending_commands.pop(key)
 
         all_commands = [command]
