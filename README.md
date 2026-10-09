@@ -12,7 +12,7 @@ Also included is the CLI tool `phirc` that takes QASM programs as input and emul
 
 ## Prerequisites
 
-Python >=3.12. CI tests Python 3.12–3.15 on Linux and Windows.
+Python >=3.12, <3.16. CI tests Python 3.12–3.15 on Linux and Windows.
 
 Python 3.10 and 3.11 users should stay on `pytket-phir<=0.10.2` or upgrade
 their interpreter. Raising the minimum lets the project use the maintained

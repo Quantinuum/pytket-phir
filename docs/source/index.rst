@@ -21,7 +21,7 @@ input and emulates them using PECOS.
 Installation
 ------------
 
-Python 3.12 or newer is required. CI tests Python 3.12–3.15 on Linux and Windows.
+Python 3.12–3.15 is supported. CI tests these versions on Linux and Windows.
 
 This matrix covers circuit translation. The optional ``phirc`` CLI still needs
 ProjectQ build compatibility and migration from the removed

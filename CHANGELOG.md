@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Require Python 3.12 or newer and test Python 3.12–3.15 in CI. Python 3.10
+* Require Python >=3.12, <3.16 and test Python 3.12–3.15 in CI. Python 3.10
   and 3.11 users must retain `pytket-phir<=0.10.2` or upgrade Python.
   Release this support-policy change in the next minor version (0.11.0),
   so downstream packages pinned to the 0.10 series retain their existing support.
