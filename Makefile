@@ -21,7 +21,7 @@ audit:
 
 docs:
 	# uv run sphinx-apidoc --implicit-namespaces -f -o docs/source/ pytket
-	uv run sphinx-build -M html docs/source/ docs/build/
+	uv run sphinx-build -W -M html docs/source/ docs/build/
 
 clean:
 	rm -rf *.egg-info dist build docs/build

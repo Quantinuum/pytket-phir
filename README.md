@@ -1,7 +1,7 @@
 # pytket-phir
 
 [![PyPI version](https://badge.fury.io/py/pytket-phir.svg)](https://badge.fury.io/py/pytket-phir)
-[![Python versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://img.shields.io/badge/python-3.10%2C%203.11%20%7C%203.12-blue.svg)
+[![Python versions](https://img.shields.io/badge/python-3.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-blue.svg)](https://www.python.org/downloads/)
 
 PHIR stands for _[PECOS](https://github.com/PECOS-packages/PECOS) High-level Intermediate Representation_.
 See [PHIR specification](https://github.com/quantinuum/phir/blob/main/spec.md) for more.
@@ -12,7 +12,11 @@ Also included is the CLI tool `phirc` that takes QASM programs as input and emul
 
 ## Prerequisites
 
-Python >=3.10
+Python >=3.12. CI tests Python 3.12–3.15 on Linux and Windows.
+
+Python 3.10 and 3.11 users should stay on `pytket-phir<=0.10.2` or upgrade
+their interpreter. Raising the minimum lets the project use the maintained
+NumPy, SciPy, and Sphinx release lines that require Python 3.12 or newer.
 
 ## Installation
 
@@ -23,6 +27,11 @@ Just issue `pip install pytket-phir` to obtain the latest stable release.
 The package includes a tool for emulating QASM files from the command line using PECOS.
 
 Install additional dependencies needed for the CLI using `pip install pytket-phir[phirc]`.
+
+The Python 3.12–3.15 support matrix covers the circuit translation library.
+The optional CLI currently needs dependency maintenance: ProjectQ 0.8.0 fails
+to build with current setuptools, and the locked PECOS 0.8.0.dev8 release no
+longer provides `pecos.foreign_objects.wasmtime`, which the CLI imports.
 
 ```sh
 ❯ phirc -h

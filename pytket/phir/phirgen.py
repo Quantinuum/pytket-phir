@@ -8,18 +8,10 @@
 
 import json
 import logging
-import sys
 from collections import deque
 from copy import deepcopy
 from importlib.metadata import version
-from typing import TYPE_CHECKING, Any, TypeAlias
-
-from pytket.qasm.qasm import QASMUnsupportedError
-
-if sys.version_info >= (3, 11):
-    from typing import assert_never
-else:
-    from typing_extensions import assert_never
+from typing import TYPE_CHECKING, Any, TypeAlias, assert_never
 
 import pytket.circuit as tk
 from pytket.circuit import ClBitVar, ClExpr, ClOp, ClRegVar
@@ -31,6 +23,7 @@ from pytket.circuit.logic_exp import (
     LogicExp,
     RegWiseOp,
 )
+from pytket.qasm.qasm import QASMUnsupportedError
 from pytket.unit_id import Bit as tkBit
 from pytket.unit_id import BitRegister, QubitRegister
 

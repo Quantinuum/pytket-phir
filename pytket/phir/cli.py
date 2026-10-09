@@ -12,8 +12,6 @@ import logging
 from argparse import ArgumentParser
 from importlib.metadata import version
 
-from pecos.engines.hybrid_engine import HybridEngine
-from pecos.foreign_objects.wasmtime import WasmtimeObj
 from pytket.qasm.qasm import (
     circuit_from_qasm,
     circuit_from_qasm_wasm,
@@ -54,6 +52,14 @@ def main() -> None:
         version=version("pytket-phir"),
     )
     args = parser.parse_args()
+
+    # Emulation dependencies are optional; help, version, and autodoc do not need them.
+    from pecos.engines.hybrid_engine import (  # ruff: ignore[import-outside-top-level]
+        HybridEngine,
+    )
+    from pecos.foreign_objects.wasmtime import (  # ruff: ignore[import-outside-top-level]
+        WasmtimeObj,
+    )
 
     for file in args.qasm_files:
         print(f"Processing {file}")
