@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Clean up temporary QASM and WASM input files after conversion, including when
+  parsing fails, while allowing the files to be reopened on Windows.
+
 ### Changed
 
 * Require Python >=3.12, <3.16 and test Python 3.12–3.15 in CI. Python 3.10

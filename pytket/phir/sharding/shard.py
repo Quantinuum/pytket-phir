@@ -9,7 +9,7 @@
 import io
 from dataclasses import dataclass, field
 from itertools import count
-from typing import TYPE_CHECKING, TypeAlias
+from typing import TYPE_CHECKING, TypeAlias, override
 
 if TYPE_CHECKING:
     from pytket.circuit import Command
@@ -46,6 +46,7 @@ class Shard:
     # A set of the identifiers of other shards this particular shard depends upon
     depends_upon: set[int]
 
+    @override
     def __hash__(self) -> int:
         """Hashing for shards is done only by its autogen unique int ID."""
         return self.ID

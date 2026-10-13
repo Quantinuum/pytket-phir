@@ -10,6 +10,9 @@ import base64
 import hashlib
 import json
 import logging
+from functools import partial
+from tempfile import NamedTemporaryFile
+from typing import TYPE_CHECKING
 
 import pytest
 from pytket.circuit import Circuit, Qubit
@@ -17,15 +20,29 @@ from pytket.qasm.qasm import QASMUnsupportedError
 from pytket.wasm.wasm import WasmModuleHandler
 
 from pytket.phir.api import pytket_to_phir, qasm_to_phir
+from pytket.phir.phirgen import WORDSIZE
 from pytket.phir.qtm_machine import QtmMachine
 
 from .test_utils import WatFile, get_wat_as_wasm_bytes
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 logger = logging.getLogger(__name__)
 
 
-def test_qasm_to_phir_with_wasm() -> None:
-    """Test the qasm string entrypoint works with WASM."""
+@pytest.fixture
+def input_tempdir(tmp_path: "Path", monkeypatch: pytest.MonkeyPatch) -> "Path":
+    """Isolate temporary input files from the parser's persistent grammar cache."""
+    monkeypatch.setattr(
+        "pytket.phir.api.NamedTemporaryFile",
+        partial(NamedTemporaryFile, dir=tmp_path),
+    )
+    return tmp_path
+
+
+def test_qasm_to_phir_with_wasm(input_tempdir: "Path") -> None:
+    """Test WASM conversion and cleanup of temporary input files."""
     qasm = """
     OPENQASM 2.0;
     include "qelib1.inc";
@@ -59,9 +76,10 @@ def test_qasm_to_phir_with_wasm() -> None:
         "args": ["cr", "cs"],
         "returns": ["co"],
     }
+    assert not any(input_tempdir.iterdir())
 
 
-def test_qasm_wasm_unsupported_reg_len() -> None:
+def test_qasm_wasm_unsupported_reg_len(input_tempdir: "Path") -> None:
     """Test that qasm containing calls to WASM with more than 32-bits fails."""
     qasm = """
     OPENQASM 2.0;
@@ -79,6 +97,18 @@ def test_qasm_wasm_unsupported_reg_len() -> None:
         match=r"limited to at most 32-bit|try setting the `maxwidth` parameter",
     ):
         qasm_to_phir(qasm, QtmMachine.H1, wasm_bytes=wasm_bytes)
+    assert not any(input_tempdir.iterdir())
+
+
+def test_qasm_wasm_parse_failure_cleans_up_inputs(input_tempdir: "Path") -> None:
+    """Remove temporary inputs when parsing fails before circuit conversion."""
+    qasm = f"OPENQASM 2.0;\ncreg cr[{WORDSIZE + 1}];"
+    wasm_bytes = get_wat_as_wasm_bytes(WatFile.add)
+
+    with pytest.raises(QASMUnsupportedError, match="register"):
+        qasm_to_phir(qasm, wasm_bytes=wasm_bytes)
+
+    assert not any(input_tempdir.iterdir())
 
 
 def test_pytket_with_wasm() -> None:
