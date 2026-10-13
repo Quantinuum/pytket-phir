@@ -12,11 +12,7 @@ Also included is the CLI tool `phirc` that takes QASM programs as input and emul
 
 ## Prerequisites
 
-Python >=3.12, <3.16. CI tests Python 3.12–3.15 on Linux and Windows.
-
-Python 3.10 and 3.11 users should stay on `pytket-phir<=0.10.2` or upgrade
-their interpreter. Raising the minimum lets the project use the maintained
-NumPy, SciPy, and Sphinx release lines that require Python 3.12 or newer.
+Python >=3.12, <3.16
 
 ## Installation
 
@@ -27,12 +23,6 @@ Just issue `pip install pytket-phir` to obtain the latest stable release.
 The package includes a tool for emulating QASM files from the command line using PECOS.
 
 Install additional dependencies needed for the CLI using `pip install pytket-phir[phirc]`.
-
-CI tests circuit translation and CLI emulation using the locked dependencies.
-For the same environment, run `uv sync --extra phirc` from a checkout.
-The lockfile selects PECOS `0.8.0.dev0`, which supports PHIR and WASM emulation
-without Guppy, HUGR, or Selene. The CLI requires PECOS `>=0.8.0.dev0`;
-`pip` installs may select newer PECOS releases with additional dependencies.
 
 ```sh
 ❯ phirc -h

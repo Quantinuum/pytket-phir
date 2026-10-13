@@ -21,18 +21,19 @@ input and emulates them using PECOS.
 Installation
 ------------
 
-Python 3.12–3.15 is supported. CI tests these versions on Linux and Windows.
-
-CI tests circuit translation and optional ``phirc`` emulation using the locked
-dependencies. To use that environment from a checkout, run
-``uv sync --extra phirc``. The lockfile selects PECOS ``0.8.0.dev0`` without
-Guppy, HUGR, or Selene; ``pip`` installs may select newer PECOS releases.
+Requires Python ``>=3.12, <3.16``.
 
 To install pytket-phir, simply run:
 
 .. code-block:: bash
 
    pip install pytket-phir
+
+For the optional ``phirc`` CLI:
+
+.. code-block:: bash
+
+   pip install "pytket-phir[phirc]"
 
 Indices and tables
 ==================
