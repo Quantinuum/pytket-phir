@@ -28,10 +28,11 @@ The package includes a tool for emulating QASM files from the command line using
 
 Install additional dependencies needed for the CLI using `pip install pytket-phir[phirc]`.
 
-The Python 3.12–3.15 support matrix covers the circuit translation library.
-The optional CLI currently needs dependency maintenance: ProjectQ 0.8.0 fails
-to build with current setuptools, and the locked PECOS 0.8.0.dev8 release no
-longer provides `pecos.foreign_objects.wasmtime`, which the CLI imports.
+CI tests circuit translation and CLI emulation using the locked dependencies.
+For the same environment, run `uv sync --extra phirc` from a checkout.
+The lockfile selects PECOS `0.8.0.dev0`, which supports PHIR and WASM emulation
+without Guppy, HUGR, or Selene. The CLI requires PECOS `>=0.8.0.dev0`;
+`pip` installs may select newer PECOS releases with additional dependencies.
 
 ```sh
 ❯ phirc -h

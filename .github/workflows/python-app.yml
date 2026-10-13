@@ -40,8 +40,9 @@ jobs:
         uv run prek run --all-files
     - name: Run tests
       run: |
-        uv run python tests/e2e_test.py
-        uv run pytest -W error::DeprecationWarning -W error::PendingDeprecationWarning
+        uv run pytest tests/test_cli.py -k information
+        uv run --locked --extra phirc python tests/e2e_test.py
+        uv run --locked --extra phirc pytest -W error::DeprecationWarning -W error::PendingDeprecationWarning
     - name: Check types for supported Python version
       run: uv run ty check --python-version ${{ matrix.python-version }} pytket tests
     - name: Build and check package

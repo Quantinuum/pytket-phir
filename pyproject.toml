@@ -60,7 +60,7 @@ Documentation = "https://quantinuum.github.io/pytket-phir/"
 Repository = "https://github.com/quantinuum/pytket-phir.git"
 
 [project.optional-dependencies]
-phirc = ["projectq>=0.8.0", "quantum-pecos>=0.6.0.dev2"]
+phirc = ["quantum-pecos>=0.8.0.dev0"]
 
 [tool.setuptools.packages.find]
 where = ["."]

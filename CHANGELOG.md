@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Clean up temporary QASM and WASM input files after conversion, including when
   parsing fails, while allowing the files to be reopened on Windows.
+* Restore optional `phirc` emulation with PECOS's current WASM interface,
+  require PECOS `>=0.8.0.dev0`, and remove the unused ProjectQ dependency.
 
 ### Changed
 
@@ -18,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and 3.11 users must retain `pytket-phir<=0.10.2` or upgrade Python.
   Release this support-policy change in the next minor version (0.11.0),
   so downstream packages pinned to the 0.10 series retain their existing support.
+* Lock PECOS to `0.8.0.dev0` for CLI testing without Guppy, HUGR, or Selene.
 
 ## [0.10.2] - 2026-08-18
 
