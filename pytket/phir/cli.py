@@ -11,9 +11,8 @@
 import logging
 from argparse import ArgumentParser
 from importlib.metadata import version
+from typing import TYPE_CHECKING, cast
 
-from pecos.engines.hybrid_engine import HybridEngine
-from pecos.foreign_objects.wasmtime import WasmtimeObj
 from pytket.qasm.qasm import (
     circuit_from_qasm,
     circuit_from_qasm_wasm,
@@ -23,6 +22,11 @@ from pytket.phir.phirgen import WORDSIZE
 
 from .api import pytket_to_phir
 from .qtm_machine import QtmMachine
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from pecos.protocols import ForeignObjectProtocol
 
 
 def main() -> None:
@@ -55,13 +59,26 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    # Emulation dependencies are optional; help, version, and autodoc do not need them.
+    from pecos.engines.hybrid_engine import (  # ruff: ignore[import-outside-top-level]
+        HybridEngine,
+    )
+
+    if args.wasm_file:
+        from pecos import (  # ruff: ignore[import-outside-top-level]
+            WasmForeignObject,
+        )
+
     for file in args.qasm_files:
         print(f"Processing {file}")
         circuit = None
         if args.wasm_file:
             print(f"Including WASM from file {args.wasm_file}")
             circuit = circuit_from_qasm_wasm(file, args.wasm_file, maxwidth=WORDSIZE)
-            wasm_pecos_obj = WasmtimeObj(args.wasm_file)
+            # Native WASM bindings have placeholder stubs; use PECOS's protocol.
+            wasm_pecos_obj = cast(
+                "Callable[[str], ForeignObjectProtocol]", WasmForeignObject
+            )(args.wasm_file)
         else:
             circuit = circuit_from_qasm(file, maxwidth=WORDSIZE)
 

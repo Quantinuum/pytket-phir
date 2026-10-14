@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools_scm>=8", "wheel"]
+requires = ["setuptools>=77", "setuptools_scm>=8", "wheel"]
 build-backend = "setuptools.build_meta"
 
 # https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
@@ -7,8 +7,9 @@ build-backend = "setuptools.build_meta"
 name = "pytket-phir"
 description = "A circuit analyzer and translator from pytket to PHIR"
 readme = "README.md"
-requires-python = ">=3.10, <3.15"
-license = { file = "LICENSE" }
+requires-python = ">=3.12, <3.16"
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 authors = [{ name = "Quantinuum" }]
 maintainers = [
   { name = "Kartik Singhal", email = "Kartik.Singhal@quantinuum.com" },
@@ -18,9 +19,12 @@ classifiers = [
   "Environment :: Console",
   "Intended Audience :: Developers",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: BSD License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Scientific/Engineering",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Typing :: Typed",
@@ -56,7 +60,7 @@ Documentation = "https://quantinuum.github.io/pytket-phir/"
 Repository = "https://github.com/quantinuum/pytket-phir.git"
 
 [project.optional-dependencies]
-phirc = ["projectq>=0.8.0", "quantum-pecos>=0.6.0.dev2"]
+phirc = ["quantum-pecos>=0.8.0.dev0"]
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -78,10 +82,10 @@ log_date_format = "%Y-%m-%d %H:%M:%S"
 version_scheme = "python-simplified-semver"
 
 [tool.refurb]
-python_version = "3.10"
+python_version = "3.12"
 
 [tool.ty.environment]
-python-version = "3.10"
+python-version = "3.12"
 
 [tool.ty.analysis]
 allowed-unresolved-imports = ["pecos.**"]

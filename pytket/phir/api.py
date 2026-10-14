@@ -148,9 +148,10 @@ def qasm_to_phir(
     """
     circuit: Circuit
     if wasm_bytes:
+        # Keep inputs reopenable on Windows and remove them on context exit.
         with (
-            NamedTemporaryFile(suffix=".qasm", delete=False) as qasm_file,
-            NamedTemporaryFile(suffix=".wasm", delete=False) as wasm_file,
+            NamedTemporaryFile(suffix=".qasm", delete_on_close=False) as qasm_file,
+            NamedTemporaryFile(suffix=".wasm", delete_on_close=False) as wasm_file,
         ):
             qasm_file.write(qasm.encode())
             qasm_file.flush()

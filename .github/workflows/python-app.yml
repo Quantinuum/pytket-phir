@@ -11,12 +11,9 @@ jobs:
 
     strategy:
       matrix:
+        # Keep Ubuntu first: matrix job 0 handles publishing and the audit.
         os: [ubuntu-latest, windows-latest]
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
-        include:
-          - os: ubuntu-latest
-            python-version: "3.13"
-            deploy-gh-pages: true
+        python-version: ["3.12", "3.13", "3.14", "3.15"]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -29,7 +26,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         enable-cache: true
     - name: Dependency vulnerability audit
-      if: ${{ matrix.deploy-gh-pages }}
+      if: ${{ strategy.job-index == 0 }}
       continue-on-error: true
       run: |
         # Work around astral-sh/uv#19492 until `uv audit` can handle malformed
@@ -37,20 +34,28 @@ jobs:
         uv audit --locked
     - name: Install dependencies
       run: |
-        uv sync --dev
+        uv sync --locked --dev
     - name: Prek checks
       run: |
         uv run prek run --all-files
     - name: Run tests
       run: |
-        uv run pytest
+        uv run pytest tests/test_cli.py -k information
+        uv run --locked --extra phirc python tests/e2e_test.py
+        uv run --locked --extra phirc pytest -W error::DeprecationWarning -W error::PendingDeprecationWarning
+    - name: Check types for supported Python version
+      run: uv run ty check --python-version ${{ matrix.python-version }} pytket tests
+    - name: Build and check package
+      run: |
+        uv build
+        uvx twine check --strict dist/*
     - name: Sphinx documentation build
       if: ${{ matrix.os != 'windows-latest' }}
       run: |
         make docs
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && matrix.deploy-gh-pages }}
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && strategy.job-index == 0 }}
       with:
         publish_branch: gh-pages
         github_token: ${{ secrets.GITHUB_TOKEN }}

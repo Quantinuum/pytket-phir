@@ -1,7 +1,7 @@
 # pytket-phir
 
 [![PyPI version](https://badge.fury.io/py/pytket-phir.svg)](https://badge.fury.io/py/pytket-phir)
-[![Python versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://img.shields.io/badge/python-3.10%2C%203.11%20%7C%203.12-blue.svg)
+[![Python versions](https://img.shields.io/badge/python-3.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-blue.svg)](https://www.python.org/downloads/)
 
 PHIR stands for _[PECOS](https://github.com/PECOS-packages/PECOS) High-level Intermediate Representation_.
 See [PHIR specification](https://github.com/quantinuum/phir/blob/main/spec.md) for more.
@@ -12,7 +12,7 @@ Also included is the CLI tool `phirc` that takes QASM programs as input and emul
 
 ## Prerequisites
 
-Python >=3.10
+Python >=3.12, <3.16
 
 ## Installation
 
