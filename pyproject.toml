@@ -48,8 +48,10 @@ dev = [
 ]
 
 [tool.uv]
+required-version = ">=0.13.4"
+required-environments = ["sys_platform == 'win32' and platform_machine == 'AMD64'"]
 exclude-newer = "7 days"
-exclude-newer-package = { requests = false, urllib3 = false }
+exclude-newer-package = { certifi = false }
 
 [project.scripts]
 phirc = "pytket.phir.cli:main"
