@@ -41,7 +41,7 @@ dev = [
   "networkx<3",
   "prek>=0.3.11",
   "pydata-sphinx-theme>=0.16.1",
-  "pytest==9.1.1",
+  "pytest==9.2.0",
   "rich>=13.0",
   "sphinx>8.1",
   "ty>=0.0.33",
@@ -51,7 +51,7 @@ dev = [
 required-version = ">=0.13.4"
 required-environments = ["sys_platform == 'win32' and platform_machine == 'AMD64'"]
 exclude-newer = "7 days"
-exclude-newer-package = { certifi = false }
+exclude-newer-package = { certifi = false, pytest = false }
 
 [project.scripts]
 phirc = "pytket.phir.cli:main"
